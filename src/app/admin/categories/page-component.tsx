@@ -42,9 +42,9 @@ import { toast } from "sonner";
 import {
   createCategorySchema,
   CreateCategorySchema,
-} from "./create-category.schema";
-import { CategoriesWithProductsResponse } from "./catergories.types";
-import { CategoryForm } from "./category-form";
+} from "@/app/admin/categories/create-category.schema";
+import { CategoriesWithProductsResponse } from "@/app/admin/categories/catergories.types";
+import { CategoryForm } from "@/app/admin/categories/category-form";
 
 type Props = {
   categories: CategoriesWithProductsResponse;
