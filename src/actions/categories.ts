@@ -1,7 +1,10 @@
 "use server";
 
 import { CategoriesWithProductsResponse } from "@/app/admin/categories/catergories.types";
-import { CreateCategorySchemaServer } from "@/app/admin/categories/create-category.schema";
+import {
+  CreateCategorySchemaServer,
+  UpdateCategorySchema,
+} from "@/app/admin/categories/create-category.schema";
 import { createClient } from "@/supabase/server";
 import { revalidatePath } from "next/cache";
 import slugify from "slugify";
@@ -44,9 +47,7 @@ export const imageUploadHandler = async (formData: FormData) => {
 
     const {
       data: { publicUrl },
-    } = await (await supabase).storage
-      .from("app-images")
-      .getPublicUrl(data.path);
+    } = (await supabase).storage.from("app-images").getPublicUrl(data.path);
 
     return publicUrl;
   } catch (error) {
@@ -59,10 +60,10 @@ export const createCategory = async ({
   imageUrl,
   name,
 }: CreateCategorySchemaServer) => {
-  const supabase = createClient();
+  const supabase = await createClient();
   const slug = slugify(name, { lower: true });
 
-  const { data, error } = await (await supabase).from("category").insert({
+  const { data, error } = await supabase.from("category").insert({
     name,
     imageUrl,
     slug,
@@ -73,4 +74,30 @@ export const createCategory = async ({
   revalidatePath("/admin/categories");
 
   return data;
+};
+export const updateCategory = async ({
+  imageUrl,
+  name,
+  slug,
+}: UpdateCategorySchema) => {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("category")
+    .update({ name, imageUrl })
+    .match({ slug });
+
+  if (error) throw new Error(`Error updating category: ${error.message}`);
+
+  revalidatePath("/admin/categories");
+
+  return data;
+};
+
+export const deleteCategory = async (id: number) => {
+  const supabase = await createClient();
+  const { error } = await supabase.from("category").delete().match({ id });
+
+  if (error) throw new Error(`Error deleting category: ${error.message}`);
+
+  revalidatePath("/admin/categories");
 };
