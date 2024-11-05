@@ -34,13 +34,13 @@ export const createProduct = async ({
   price,
   title,
 }: CreateProductSchemaServer) => {
-  const supabase = createClient();
+  const supabase = await createClient();
   const slug = slugify(title, { lower: true });
 
   const { data, error } = await supabase.from("product").insert({
     category,
     heroImage,
-    imagesUrl: images,
+    imageUrl: images,
     maxQuantity,
     price,
     slug,

@@ -23,6 +23,9 @@ export const ProductTableRow = ({
   setCurrentProduct,
   setIsDeleteModalOpen,
 }: Props) => {
+  const formatImageUrl = (url: string) => {
+    return url.startsWith("http") ? url : `/${url}`;
+  };
   const handleEditClick = (product: CreateOrUpdateProductSchema) => {
     setCurrentProduct({
       title: product.title,
@@ -48,19 +51,19 @@ export const ProductTableRow = ({
           <Image
             width={40}
             height={40}
-            src={product.heroImage}
+            src={formatImageUrl(product.heroImage)}
             alt="Hero"
             className="w-10 h-10 object-cover"
           />
         )}
       </TableCell>
       <TableCell>
-        {product.imagesUrl.map((url, index) => (
+        {(product.imagesUrl || []).map((url, index) => (
           <Image
             width={40}
             height={40}
             key={index}
-            src={url}
+            src={formatImageUrl(url)}
             alt={`Product ${index + 1}`}
             className="w-10 h-10 object-cover inline-block mr-1"
           />

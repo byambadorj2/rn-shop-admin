@@ -93,7 +93,7 @@ export const CategoryTableRow = ({
                           alt="Product image"
                           className="aspect-square rounded-md object-cover"
                           height="100"
-                          src={product.hero_image}
+                          src={product.heroImage}
                           width="100"
                         />
                         <div className="flex flex-col space-y-1">
@@ -101,7 +101,7 @@ export const CategoryTableRow = ({
                             {product.title}
                           </h3>
                           <p className="text-sm text-muted-foreground">
-                            {product.max_quantity} in stock
+                            {product.maxQuantity} in stock
                           </p>
                         </div>
                       </div>
